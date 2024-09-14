@@ -1,42 +1,66 @@
 package nunes03.com.github.expensemanager.routes;
 
-import nunes03.com.github.expensemanager.database.entities.LucasEntity;
-import nunes03.com.github.expensemanager.database.repositories.LucasRepository;
+import nunes03.com.github.expensemanager.dto.ExpenseDto;
+import nunes03.com.github.expensemanager.dto.ExpensePaginationDto;
+import nunes03.com.github.expensemanager.services.interfaces.ExpenseService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/expense")
 public class ExpenseRestController {
 
-    final LucasRepository lucasRepository;
+    final ExpenseService expenseService;
 
-    public ExpenseRestController(LucasRepository lucasRepository) {
-        this.lucasRepository = lucasRepository;
+    public ExpenseRestController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
     }
 
-    @GetMapping(value = "/id")
+    @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public String test(@RequestParam("id") String id) {
-        System.err.println("Teste " + id);
+    public ExpenseDto getId(@PathVariable UUID id) {
+        return expenseService.findById(id);
+    }
 
-        final var a = new LucasEntity();
-        a.setName("Teste");
+    @GetMapping()
+    @ResponseStatus(value = HttpStatus.OK)
+    public ExpensePaginationDto get(
+        @RequestParam Integer pageNumber,
+        @RequestParam Integer pageSize
+    ) {
+        return expenseService.findAll(pageNumber, pageSize);
+    }
 
-        final var b = new LucasEntity();
-        b.setName("olja");
+    @PostMapping()
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ExpenseDto post(@RequestBody ExpenseDto expenseDto) {
+        return expenseService.save(expenseDto);
+    }
 
-        lucasRepository.saveAll(List.of(a, b));
+    @PutMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ExpenseDto put(
+        @PathVariable UUID id,
+        @RequestBody ExpenseDto expenseDto
+    ) {
+        expenseDto.setId(id);
+        return expenseService.save(expenseDto);
+    }
 
-        System.err.println(lucasRepository.findAll());
-        lucasRepository.deleteAll();
-
-        return "teste";
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable UUID id) {
+        expenseService.delete(id);
     }
 }
