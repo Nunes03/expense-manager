@@ -12,11 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public final class ExpensePaginationDto extends BasePaginationDto {
+public final class CategoryPaginationDto extends BasePaginationDto {
 
-    List<ExpenseDto> elements = new ArrayList<>();
+    List<CategoryDto> elements = new ArrayList<>();
 
-    public ExpensePaginationDto(Integer totalElements, Integer totalPages, List<ExpenseDto> elements) {
+    public CategoryPaginationDto(Integer totalElements, Integer totalPages, List<CategoryDto> elements) {
         super(totalElements, totalPages);
         this.elements = elements;
     }

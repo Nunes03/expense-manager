@@ -6,5 +6,4 @@ import nunes03.com.github.expensemanager.dto.ExpensePaginationDto;
 import java.util.UUID;
 
 public interface ExpenseService extends BaseCrudService<ExpenseDto, ExpensePaginationDto, UUID> {
-
 }

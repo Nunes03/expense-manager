@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import nunes03.com.github.expensemanager.database.entities.ExpenseEntity;
 import nunes03.com.github.expensemanager.database.repositories.ExpenseRepository;
+import nunes03.com.github.expensemanager.dto.CategoryDto;
 import nunes03.com.github.expensemanager.dto.ExpenseDto;
 import nunes03.com.github.expensemanager.dto.ExpensePaginationDto;
 import nunes03.com.github.expensemanager.services.interfaces.ExpenseService;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -46,7 +46,7 @@ public class ExpenseServiceServiceImpl implements ExpenseService {
         final var expensesDto = page
             .get()
             .map(ExpenseDto::toDto)
-            .collect(Collectors.toList());
+            .toList();
 
         return new ExpensePaginationDto(
             page.getNumberOfElements(),
@@ -74,17 +74,21 @@ public class ExpenseServiceServiceImpl implements ExpenseService {
     }
 
     private ExpenseEntity create(ExpenseDto expenseDto) {
+        final var category = CategoryDto.toEntity(expenseDto.getCategory());
+
         var expenseEntity = new ExpenseEntity(
             expenseDto.getName(),
             expenseDto.getDescription(),
             expenseDto.getValue(),
-            expenseDto.getDate()
+            expenseDto.getDate(),
+            category
         );
 
         return expenseRepository.save(expenseEntity);
     }
 
     private ExpenseEntity update(ExpenseDto expenseDto) {
+        final var category = CategoryDto.toEntity(expenseDto.getCategory());
         final var currentExpenseDto = findById(expenseDto.getId());
 
         var expenseEntity = new ExpenseEntity(
@@ -92,7 +96,8 @@ public class ExpenseServiceServiceImpl implements ExpenseService {
             expenseDto.getName(),
             expenseDto.getDescription(),
             expenseDto.getValue(),
-            expenseDto.getDate()
+            expenseDto.getDate(),
+            category
         );
 
         return expenseRepository.save(expenseEntity);

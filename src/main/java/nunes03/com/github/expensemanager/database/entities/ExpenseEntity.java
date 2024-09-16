@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,10 +43,29 @@ public class ExpenseEntity {
     @Column(name = "date", nullable = false)
     LocalDate date;
 
-    public ExpenseEntity(String name, String description, BigDecimal value, LocalDate date) {
-        this.name = name;
-        this.description = description;
-        this.value = value;
-        this.date = date;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    CategoryEntity category;
+
+    public ExpenseEntity(UUID id) {
+        this(
+            id,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+    }
+
+    public ExpenseEntity(String name, String description, BigDecimal value, LocalDate date, CategoryEntity category) {
+        this(
+            null,
+            name,
+            description,
+            value,
+            date,
+            category
+        );
     }
 }

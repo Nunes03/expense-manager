@@ -2,9 +2,9 @@ package nunes03.com.github.expensemanager.routes;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import nunes03.com.github.expensemanager.dto.ExpenseDto;
-import nunes03.com.github.expensemanager.dto.ExpensePaginationDto;
-import nunes03.com.github.expensemanager.services.interfaces.ExpenseService;
+import nunes03.com.github.expensemanager.dto.CategoryDto;
+import nunes03.com.github.expensemanager.dto.CategoryPaginationDto;
+import nunes03.com.github.expensemanager.services.interfaces.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,49 +20,49 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/expense")
+@RequestMapping(value = "/api/category")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExpenseRestController {
+public class CategoryRestController {
 
-    ExpenseService expenseService;
+    CategoryService categoryService;
 
-    public ExpenseRestController(ExpenseService expenseService) {
-        this.expenseService = expenseService;
+    public CategoryRestController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ExpenseDto getId(
+    public CategoryDto getId(
         @PathVariable UUID id
     ) {
-        return expenseService.findById(id);
+        return categoryService.findById(id);
     }
 
     @GetMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public ExpensePaginationDto get(
+    public CategoryPaginationDto get(
         @RequestParam Integer pageNumber,
         @RequestParam Integer pageSize
     ) {
-        return expenseService.findAll(pageNumber, pageSize);
+        return categoryService.findAll(pageNumber, pageSize);
     }
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ExpenseDto post(
-        @RequestBody ExpenseDto expenseDto
+    public CategoryDto post(
+        @RequestBody CategoryDto expenseDto
     ) {
-        return expenseService.save(expenseDto);
+        return categoryService.save(expenseDto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ExpenseDto put(
+    public CategoryDto put(
         @PathVariable UUID id,
-        @RequestBody ExpenseDto expenseDto
+        @RequestBody CategoryDto expenseDto
     ) {
         expenseDto.setId(id);
-        return expenseService.save(expenseDto);
+        return categoryService.save(expenseDto);
     }
 
     @DeleteMapping("/{id}")
@@ -70,6 +70,6 @@ public class ExpenseRestController {
     public void delete(
         @PathVariable UUID id
     ) {
-        expenseService.delete(id);
+        categoryService.delete(id);
     }
 }

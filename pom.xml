@@ -52,7 +52,6 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -71,6 +70,12 @@
       <artifactId>lombok</artifactId>
       <version>${lombok-version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>9.20.0</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -81,5 +86,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
